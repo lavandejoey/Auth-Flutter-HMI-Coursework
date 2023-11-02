@@ -324,6 +324,7 @@ class UserProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Profile'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           settingButton(context, userDb),
         ],
@@ -358,7 +359,7 @@ class UserProfilePage extends StatelessWidget {
               //     Navigator.push(
               //       context,
               //       MaterialPageRoute(
-              //           builder: (context) => ChangePasswordPage(user: user)),
+              //           builder: (context) => EditPage(user: user)),
               //     );
               //   },
               //   child: const Text('Change Password'),

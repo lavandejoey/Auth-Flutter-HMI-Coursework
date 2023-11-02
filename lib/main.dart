@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'menu_buttons.dart';
-import 'user.dart';
 import 'auth_pages.dart';
 
 void main() => runApp(FlutterHMICoursework());
 
 // Define the colors
-const Color primaryColor = Color(0xFF1f3b54);
-const Color secondaryColor = Color(0xFFa55d51);
+const Color primaryColor = Color(0xFFa55d51);
+const Color secondaryColor = Color(0xFF1f3b54);
 const Color tertiaryColor = Color(0xFFbdd0ca);
 const Color successColor = Color(0xFF146654);
 const Color infoColor = Color(0xFF3c7699);
@@ -19,25 +18,16 @@ const Color darkColor = Color(0xFF000000);
 
 // Define your theme
 final ThemeData HMIColour = ThemeData(
-  colorScheme: ColorScheme.fromSwatch(
-    primarySwatch: const MaterialColor(0xFF1f3b54, <int, Color>{
-      50: Color.fromRGBO(31, 59, 84, .1),
-      100: Color.fromRGBO(31, 59, 84, .2),
-      200: Color.fromRGBO(31, 59, 84, .3),
-      300: Color.fromRGBO(31, 59, 84, .4),
-      400: Color.fromRGBO(31, 59, 84, .5),
-      500: Color.fromRGBO(31, 59, 84, .6),
-      600: Color.fromRGBO(31, 59, 84, .7),
-      700: Color.fromRGBO(31, 59, 84, .8),
-      800: Color.fromRGBO(31, 59, 84, .9),
-      900: Color.fromRGBO(31, 59, 84, 1),
-    }),
-    accentColor: secondaryColor,
-    errorColor: dangerColor,
-    backgroundColor: tertiaryColor,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: primaryColor,
     brightness: Brightness.light,
+    primary: primaryColor,
+    secondary: secondaryColor,
+    tertiary: tertiaryColor,
+    error: dangerColor,
+    background: tertiaryColor,
   ),
-  useMaterial3: true,
+  // useMaterial3: true,
 );
 
 class FlutterHMICoursework extends StatelessWidget {

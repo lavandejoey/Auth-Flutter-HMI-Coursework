@@ -4,25 +4,29 @@ import "user.dart";
 
 class UserDb {
   // String mstrHostUrl = "http://192.168.3.8:1211/r";
-  String mstrHostUrl = "https://JoshuaZiyiLIU.com/r";
+  String mstrHostUrl = "https://dev.JoshuaZiyiLIU.com/r";
   String mstrUsername = "Joshua";
-  static const Map<String, String> mmapHeader = {
-    "User-Agent": "Android 14.0.1",
-    "Accept": "*/*",
-    "Accept-Encoding": "gzip, deflate",
-    "Connection": "keep-alive",
-    "Content-Type": "application/json",
-    "Authorization":
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY5ODg1MTMzNCwianRpIjoiNWM3OTE5NjctYWNhZC00MzY1LTkxZGUtZmUyMDFhMzY5ZWZmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE2OTg4NTEzMzQsImNzcmYiOiJhODk3ZjdmMS1mMzc5LTRhNmYtOWI0Zi03YjkyNzI2MGUwM2EifQ.iHQMhQTNwunLYLjKBFd4v8bRNQsIwd2Y6rqduvKCSY8",
-  };
+
   User? muserCurrentUser;
   bool mbLoggedIn = false;
+  String mstrJwt = "";
+
+  Map<String, String> mmapHeader() => Map<String, String>.from({
+        "User-Agent": "Android 14.0.1",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate",
+        "Connection": "keep-alive",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $mstrJwt",
+        "Host": "dev.JoshuaZiyiLIU.com",
+        "Accept-Language": "en-us,en;q=0.5, zh-cn;q=0.5, zh;q=0.3"
+      });
 
   Future<User?> insertUser(User user) async {
     final Uri uriUrl = Uri.parse("$mstrHostUrl/db/user");
     final jsonUser = jsonEncode(user.toMap());
     final responseGetUser =
-        await http.put(uriUrl, headers: mmapHeader, body: jsonUser);
+        await http.put(uriUrl, headers: mmapHeader(), body: jsonUser);
 
     if (responseGetUser.statusCode == 200) {
       Map<String, dynamic> mapResponseData = jsonDecode(responseGetUser.body);
@@ -47,7 +51,7 @@ class UserDb {
     }
 
     final Uri uriUrl = Uri.parse("$mstrHostUrl/db/user$getArgs");
-    final responseGetUser = await http.get(uriUrl, headers: mmapHeader);
+    final responseGetUser = await http.get(uriUrl, headers: mmapHeader());
 
     if (responseGetUser.statusCode == 200) {
       Map<String, dynamic> mapResponseData = jsonDecode(responseGetUser.body);
@@ -65,7 +69,7 @@ class UserDb {
     final Uri uriUrl = Uri.parse("$mstrHostUrl/db/user");
     final jsonUser = jsonEncode(user.toMap());
     final responseUpdateUser =
-        await http.put(uriUrl, headers: mmapHeader, body: jsonUser);
+        await http.put(uriUrl, headers: mmapHeader(), body: jsonUser);
 
     if (responseUpdateUser.statusCode == 200) {
       return true;
@@ -83,22 +87,21 @@ class UserDb {
       "password": password,
       "with_token": true
     };
-    final responseAuthUser =
-        await http.post(uriUrl, headers: mmapHeader, body: jsonEncode(mapBody));
 
+    final responseAuthUser = await http.post(uriUrl,
+        headers: mmapHeader(), body: jsonEncode(mapBody));
     if (responseAuthUser.statusCode == 200) {
       Map<String, dynamic> mapResponseData = jsonDecode(responseAuthUser.body);
-      if (mapResponseData.containsKey("user")) {
-        muserCurrentUser = User.fromMap(mapResponseData["user"]);
-        mbLoggedIn = true;
-        return muserCurrentUser;
-      }
-    } else {
-      return null;
+      muserCurrentUser = User.fromMap(mapResponseData["user"]);
+      mstrJwt = mapResponseData["jwt"];
+      mbLoggedIn = true;
+      return muserCurrentUser;
     }
+    return null;
   }
 
   void logOut() {
+    mstrJwt = "";
     muserCurrentUser = null;
     mbLoggedIn = false;
   }
@@ -106,7 +109,7 @@ class UserDb {
   // getUserCount
   Future<int> getUserCount() async {
     final Uri uriUrl = Uri.parse("$mstrHostUrl/db/user-count");
-    final responseGetUserCount = await http.get(uriUrl, headers: mmapHeader);
+    final responseGetUserCount = await http.get(uriUrl, headers: mmapHeader());
 
     if (responseGetUserCount.statusCode == 200) {
       Map<String, dynamic> mapResponseData =
