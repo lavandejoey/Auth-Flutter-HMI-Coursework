@@ -1,4 +1,4 @@
-# [Auth Flutter HMI Coursework](https://github.com/lavandejoey/Auth-Flutter-HMI-Coursework-.git)
+# [Auth Flutter HMI Coursework](https://github.com/lavandejoey/Auth-Flutter-HMI-Coursework)
 
 [![Stars](https://img.shields.io/github/stars/lavandejoey/Auth-Flutter-HMI-Coursework-.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green?logo=mit)](https://opensource.org/licenses/MIT)
@@ -25,6 +25,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Update History
 
+- [2023-11-03]: Complete functions and UI of update user information.
 - [2023-11-02]: Project created. API with OpenAPI 3.0.0 created.
 
 ## CopyRight

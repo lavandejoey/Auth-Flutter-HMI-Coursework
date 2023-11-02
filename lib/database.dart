@@ -65,23 +65,30 @@ class UserDb {
   }
 
   // updateUser
-  Future<bool> updateUser(User user) async {
+  Future<User?> updateUser(User user) async {
     final Uri uriUrl = Uri.parse("$mstrHostUrl/db/user");
     final jsonUser = jsonEncode(user.toMap());
     final responseUpdateUser =
-        await http.put(uriUrl, headers: mmapHeader(), body: jsonUser);
+        await http.post(uriUrl, headers: mmapHeader(), body: jsonUser);
 
     if (responseUpdateUser.statusCode == 200) {
-      return true;
+      Map<String, dynamic> mapResponseData =
+          jsonDecode(responseUpdateUser.body);
+      Map<String, dynamic> mapUser = mapResponseData["user"];
+      return User.fromMap(mapUser);
     } else {
-      return false;
+      return null;
     }
   }
 
   Future<User?> authUser(
-      String? username, String? email, String password) async {
+      {String? uid,
+      String? username,
+      String? email,
+      required String password}) async {
     final Uri uriUrl = Uri.parse("$mstrHostUrl/db/auth");
     final Map<String, dynamic> mapBody = {
+      "uid": uid ?? "",
       "username": username ?? "",
       "email": email ?? "",
       "password": password,

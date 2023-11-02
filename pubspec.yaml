@@ -12,12 +12,13 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  sqflite: ^2.3.0
   path: ^1.8.3
   crypt: ^4.3.1
   http: ^1.1.0
   mockito: ^5.4.2
   test: ^1.24.3
+  url_launcher: ^6.2.1
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -36,10 +37,20 @@ flutter:
   fonts:
     - family: HarmonyOS_Sans_SC
       fonts:
-        - asset: assets/fonts/HarmonyOS_Sans_SC_Regular.ttf
-        - asset: assets/fonts/HarmonyOS_Sans_SC_Bold.ttf
+        - asset: assets/fonts/HarmonyOS/HarmonyOS_Sans_SC_Regular.ttf
+        - asset: assets/fonts/HarmonyOS/HarmonyOS_Sans_SC_Bold.ttf
           weight: 700
-        - asset: assets/fonts/HarmonyOS_Sans_SC_Medium.ttf
+        - asset: assets/fonts/HarmonyOS/HarmonyOS_Sans_SC_Medium.ttf
           weight: 500
-        - asset: assets/fonts/HarmonyOS_Sans_SC_Light.ttf
+        - asset: assets/fonts/HarmonyOS/HarmonyOS_Sans_SC_Light.ttf
           weight: 300
+    - family: Shantell
+      fonts:
+        - asset: assets/fonts/Shantell/ShantellSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Shantell/ShantellSans-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Shantell/ShantellSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Shantell/ShantellSans-Regular.ttf

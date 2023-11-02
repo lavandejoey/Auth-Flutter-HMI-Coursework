@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'menu_buttons.dart';
 import 'database.dart';
 import 'user.dart';
+import 'user_profile.dart';
+import 'utils.dart';
 
 class SignUpPage extends StatefulWidget {
   final String title = "Sign Up";
@@ -31,150 +33,158 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        // Home button
-        leading: IconButton(
-          icon: const Icon(Icons.home),
-          onPressed: () {
-            // Jump to WelcomePage
-            Navigator.popUntil(context, ModalRoute.withName('/'));
-          },
-        ),
+        // title: Text(widget.title),
+        // Transparent background
+        backgroundColor: Colors.transparent,
+        leading: popBackButton(context),
       ),
-      body: Center(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextField(
-                        controller: usernameController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Username',
-                        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          // Add big title
+          const Padding(
+            padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+            child: Text(
+              "Sign Up",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 50.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextField(
+                      controller: usernameController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Username',
                       ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: emailController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Email',
-                        ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Email',
                       ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: passwordController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Password',
-                        ),
-                        obscureText: true, // to hide the password
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: passwordController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Password',
                       ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: passwordConfirmController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Confirm Password',
-                        ),
-                        obscureText: true, // to hide the password
+                      obscureText: true, // to hide the password
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: passwordConfirmController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Confirm Password',
                       ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () async {
-                          String username = usernameController.text;
-                          String email = emailController.text;
-                          String password = passwordController.text;
-                          String passwordConfirm =
-                              passwordConfirmController.text;
-                          if (password != passwordConfirm) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'Password and Confirmed do not match.'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                            return;
-                          }
-
-                          // Show the SnackBar with CircularProgressIndicator when initiating the login process
+                      obscureText: true, // to hide the password
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      ),
+                      onPressed: () async {
+                        String username = usernameController.text;
+                        String email = emailController.text;
+                        String password = passwordController.text;
+                        String passwordConfirm = passwordConfirmController.text;
+                        if (password != passwordConfirm) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Row(
-                                children: [
-                                  CircularProgressIndicator(),
-                                  SizedBox(width: 20),
-                                  Text("Signing up..."),
-                                ],
-                              ),
+                              content:
+                                  Text('Password and Confirmed do not match.'),
+                              backgroundColor: Colors.red,
                             ),
                           );
-                          User? newUser = await widget.userDb.insertUser(
-                            User(
-                              username: username,
-                              password: password,
-                              email: email,
-                              createdAt: "",
-                              updatedAt: "",
-                            ),
-                          );
+                          return;
+                        }
 
-                          // After getting the authentication result, hide the SnackBar and proceed accordingly
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          if (newUser != null) {
-                            // navigate to profile page
-                            Navigator.pop(context); // This pops the signup page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UserProfilePage(
-                                    userDb: UserDb(),
-                                    user:
-                                        newUser // Pass the retrieved user object to UserProfilePage
-                                    ),
-                              ),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Signed up successful!")),
-                            );
-                            // Pop the current screen (assuming it's the signup page) and navigate back to the login page
-                            Navigator.pop(context); // This pops the signup page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      LoginPage(userDb: widget.userDb)),
-                            );
-                          } else {
-                            // Failed login
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content:
-                                    Text('Sign up failed. User already exist.'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text('Sign Up'),
-                      ),
-                    ],
-                  ),
+                        // Show the SnackBar with CircularProgressIndicator when initiating the login process
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Row(children: [
+                              CircularProgressIndicator(),
+                              Text("Signing up...")
+                            ]),
+                          ),
+                        );
+                        User? newUser = await widget.userDb.insertUser(User(
+                            username: username,
+                            password: password,
+                            email: email,
+                            createdAt: "",
+                            updatedAt: ""));
+
+                        // After getting the authentication result, hide the SnackBar and proceed accordingly
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        if (newUser != null) {
+                          // This pops the signup page
+                          Navigator.pop(context);
+                          // navigate to profile page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UserProfilePage(
+                                  userDb: widget.userDb, user: newUser),
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Signed up successful!")),
+                          );
+                          // Pop the current screen (assuming it's the signup page) and navigate back to the login page
+                          Navigator.pop(context); // This pops the signup page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    LoginPage(userDb: widget.userDb)),
+                          );
+                        } else {
+                          // Failed login
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('Sign up failed. User already exist.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Sign Up'),
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+                top: 0.0, bottom: 80.0, left: 20.0, right: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(child: logInButton(context, widget.userDb)),
+                Expanded(child: recoverPasswordButton(context)),
+                Expanded(child: aboutButton(context)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -201,173 +211,165 @@ class _LoginPageState extends State<LoginPage> {
     passwordController = TextEditingController();
   }
 
+  void authAndLogin() async {
+    String username = usernameController.text;
+    String password = passwordController.text;
+
+    // Show the SnackBar with CircularProgressIndicator when initiating the login process
+    loadingSnack(context: context, noteText: "Logging in...");
+    User? authUser =
+        await widget.userDb.authUser(username: username, password: password);
+
+    // After getting the authentication result, hide the SnackBar and proceed accordingly
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    if (authUser != null) {
+      // navigate to profile page
+      Navigator.pop(context); // This pops the login page
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              UserProfilePage(userDb: widget.userDb, user: authUser),
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login successful!'),
+        ),
+      );
+    } else {
+      // Failed login
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login failed. Invalid credentials.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        // Home button
-        leading: IconButton(
-          icon: const Icon(Icons.home),
-          onPressed: () {
-            // Jump to WelcomePage
-            Navigator.popUntil(context, ModalRoute.withName('/'));
-          },
-        ),
+        // title: Text(widget.title),
+        // Transparent background
+        backgroundColor: Colors.transparent,
+        leading: popBackButton(context),
       ),
-      body: Center(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TextField(
-                        controller: usernameController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Username',
-                        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          // Add big title
+          const Padding(
+            padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+            child: Text(
+              "Log In",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 50.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextField(
+                      controller: usernameController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Username',
                       ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: passwordController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Password',
-                        ),
-                        obscureText: true, // to hide the password
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: passwordController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Password',
                       ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () async {
-                          String username = usernameController.text;
-                          String password = passwordController.text;
-
-                          // Show the SnackBar with CircularProgressIndicator when initiating the login process
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Row(
-                                children: [
-                                  CircularProgressIndicator(),
-                                  SizedBox(width: 20),
-                                  Text("Logging in..."),
-                                ],
-                              ),
-                            ),
-                          );
-                          User? authUser = await widget.userDb
-                              .authUser(username, null, password);
-
-                          // After getting the authentication result, hide the SnackBar and proceed accordingly
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          if (authUser != null) {
-                            // navigate to profile page
-                            Navigator.pop(context); // This pops the login page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UserProfilePage(
-                                    userDb: UserDb(),
-                                    user:
-                                        authUser // Pass the retrieved user object to UserProfilePage
-                                    ),
-                              ),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Login successful!'),
-                              ),
-                            );
-                          } else {
-                            // Failed login
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content:
-                                    Text('Login failed. Invalid credentials.'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text('Log In'),
+                      obscureText: true, // to hide the password
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
                       ),
-                    ],
-                  ),
+                      onPressed: () => authAndLogin(),
+                      child: const Text('Log In'),
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+                top: 0.0, bottom: 80.0, left: 20.0, right: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(child: signUpButton(context, widget.userDb)),
+                Expanded(child: recoverPasswordButton(context)),
+                Expanded(child: aboutButton(context)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class UserProfilePage extends StatelessWidget {
-  final User user; // User object to access user details
-  final UserDb userDb;
+void showForgetPasswordDialog(BuildContext context) {
+  TextEditingController userController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
-  const UserProfilePage({
-    super.key,
-    required this.userDb,
-    required this.user,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Profile'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: [
-          settingButton(context, userDb),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Title
-              const Text(
-                "User Information",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Forget Password'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: userController,
+              decoration: const InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 20),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                // Process forget password functionality
+                // Retrieve the username and email entered
+                String username = userController.text;
+                String email = emailController.text;
 
-              // Display user details
-              Text('Name: ${user.username}'),
-              const SizedBox(height: 20),
-              Text('ID: ${user.uid}'),
-              const SizedBox(height: 20),
-              Text('E-mail: ${user.email}'),
-              const SizedBox(height: 20),
-              Text('Sign-up Date: ${user.createdAt}'),
-              const SizedBox(height: 20),
-              Text('Last Login: ${user.updatedAt}'),
-              const SizedBox(height: 40),
+                // Implement your forget password logic here...
+                // This might involve sending an email with a password reset link, for instance
 
-              // ElevatedButton(
-              //   onPressed: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => EditPage(user: user)),
-              //     );
-              //   },
-              //   child: const Text('Change Password'),
-              // ),
-            ],
-          ),
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('Submit'),
+            ),
+          ],
         ),
-      ),
-    );
-  }
+      );
+    },
+  );
 }
