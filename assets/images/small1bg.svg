@@ -1,0 +1,12 @@
+<svg viewBox="-26.0 51.0 91.92 91.92">
+    <path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -26.0, 96.96)"
+        d="M 48.75 0 L 65 32.5 L 48.75 65 L 16.24999809265137 65 L 0 32.5 L 16.25000381469727 0 Z"
+        fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4"
+        stroke-linecap="butt" />
+    <path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -10.83, 105.24)"
+        d="M 0 0 L 27.625 11.05000019073486 L 55.25 0" fill="none" stroke="#ffffff" stroke-width="1"
+        stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" />
+    <path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, 16.51, 93.51)"
+        d="M 0 37.04999923706055 L 0 0" fill="none" stroke="#ffffff" stroke-width="1"
+        stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" />
+</svg>

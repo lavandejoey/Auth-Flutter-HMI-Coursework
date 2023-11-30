@@ -4,8 +4,8 @@ class User {
   String? password;
   String email;
   String? phone = "";
-  String createdAt;
-  String updatedAt;
+  String? createdAt = "";
+  String? updatedAt = "";
 
   User({
     this.uid,
@@ -13,8 +13,8 @@ class User {
     this.password,
     required this.email,
     this.phone,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   Map<String, dynamic> toMap([bool includeId = false]) {
@@ -33,7 +33,6 @@ class User {
     return User(
       uid: map['uid'],
       username: map['username'],
-      // password: map['password'],
       email: map['email'],
       phone: map['phone'],
       createdAt: map['created_at'],

@@ -19,6 +19,11 @@ dependencies:
   test: ^1.24.3
   url_launcher: ^6.2.1
   flutter_svg: ^2.0.9
+  google_fonts: ^6.1.0
+  animated_splash_screen: ^1.1.0
+  custom_refresh_indicator: ^3.0.0
+  flutter_staggered_animations: ^1.1.1
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:

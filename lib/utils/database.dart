@@ -1,6 +1,8 @@
 import "dart:convert";
+
 import "package:http/http.dart" as http;
-import "user.dart";
+
+import 'user_model.dart';
 
 class UserDb {
   // String mstrHostUrl = "http://192.168.3.8:1211/r";
@@ -22,12 +24,32 @@ class UserDb {
         "Accept-Language": "en-us,en;q=0.5, zh-cn;q=0.5, zh;q=0.3"
       });
 
+  Future<bool> isUserExists(
+      {String? uid, String? username, String? email}) async {
+    String getArgs = "?";
+    if (uid != null) {
+      getArgs += "uid=$uid";
+    }
+    if (username != null) {
+      getArgs += "${getArgs.isEmpty ? "" : "&"}username=$username";
+    }
+    if (email != null) {
+      getArgs += "${getArgs.isEmpty ? "" : "&"}email=$email";
+    }
+
+    final Uri uriUrl = Uri.parse("$mstrHostUrl/db/user-exist$getArgs");
+    final responseGetUser = await http.get(uriUrl, headers: mmapHeader());
+
+    Map<String, dynamic> mapResponseData = jsonDecode(responseGetUser.body);
+    return mapResponseData["exists"];
+  }
+
   Future<User?> insertUser(User user) async {
     final Uri uriUrl = Uri.parse("$mstrHostUrl/db/user");
     final jsonUser = jsonEncode(user.toMap());
     final responseGetUser =
         await http.put(uriUrl, headers: mmapHeader(), body: jsonUser);
-
+    print(responseGetUser.body);
     if (responseGetUser.statusCode == 200) {
       Map<String, dynamic> mapResponseData = jsonDecode(responseGetUser.body);
       Map<String, dynamic> mapUser = mapResponseData["user"];

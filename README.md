@@ -25,6 +25,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Update History
 
+- [2023-11-28]: Complete functions and UI of login and register.
 - [2023-11-03]: Complete functions and UI of update user information.
 - [2023-11-02]: Project created. API with OpenAPI 3.0.0 created.
 

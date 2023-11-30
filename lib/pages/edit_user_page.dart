@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
-import "auth_pages.dart";
-import "menu_buttons.dart";
-import "database.dart";
-import "user.dart";
-import "user_profile.dart";
-import "utils.dart";
+import 'package:hmi/utils.dart';
+import 'package:hmi/utils/database.dart';
+import 'package:hmi/utils/menu_buttons.dart';
+import 'package:hmi/utils/user_model.dart';
+
+import 'user_profile_page.dart';
 
 class EditUserPage extends StatefulWidget {
   final UserDb userDb;
@@ -18,7 +18,7 @@ class EditUserPage extends StatefulWidget {
       required this.changePassword});
 
   @override
-  _EditUserPageState createState() => _EditUserPageState();
+  State<EditUserPage> createState() => _EditUserPageState();
 }
 
 class _EditUserPageState extends State<EditUserPage> {

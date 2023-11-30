@@ -1,7 +1,7 @@
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hmi/utils/theme.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 // icon at https://joshuaziyiliu.com/static/img/logo-pic.png
 final iconImage =
@@ -12,13 +12,13 @@ const describeText = Text(
     "This is a coursework for the Human Machine Interaction course at ECUST.");
 final githubHyperLink = GestureDetector(
   onTap: () {
-    launchUrl("https://github.com/lavandejoey/Auth-Flutter-HMI-Coursework.git"
-        as Uri);
+    launchUrl(Uri.parse(
+        "https://github.com/lavandejoey/Auth-Flutter-HMI-Coursework.git"));
   },
   child: const Text(
     "GitHub Repository",
     style: TextStyle(
-      color: infoColor,
+      color: infoColor/**/,
       decoration: TextDecoration.underline,
     ),
   ),
