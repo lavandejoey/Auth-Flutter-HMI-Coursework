@@ -531,43 +531,43 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isCheckedRememberForget = !isCheckedRememberForget;
-              });
-            },
-            child: Row(
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  width: 20.0,
-                  height: 20.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    color: tertiaryColor.withOpacity(0.8),
-                  ),
-                  child: isCheckedRememberForget
-                      ? const Icon(
-                          Icons.check,
-                          size: 20,
-                          color: Colors.white,
-                        )
-                      : const Center(),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  "Remember me",
-                  style: GoogleFonts.inter(
-                    fontSize: 15.0,
-                    color: tertiaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       isCheckedRememberForget = !isCheckedRememberForget;
+          //     });
+          //   },
+          //   child: Row(
+          //     children: [
+          //       Container(
+          //         alignment: Alignment.center,
+          //         width: 20.0,
+          //         height: 20.0,
+          //         decoration: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(5.0),
+          //           color: tertiaryColor.withOpacity(0.8),
+          //         ),
+          //         child: isCheckedRememberForget
+          //             ? const Icon(
+          //                 Icons.check,
+          //                 size: 20,
+          //                 color: Colors.white,
+          //               )
+          //             : const Center(),
+          //       ),
+          //       const SizedBox(
+          //         width: 8,
+          //       ),
+          //       Text(
+          //         "Remember me",
+          //         style: GoogleFonts.inter(
+          //           fontSize: 15.0,
+          //           color: tertiaryColor,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           const Spacer(),
           GestureDetector(
             onTap: () => showForgetPasswordDialog(context),
